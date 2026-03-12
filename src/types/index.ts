@@ -5,4 +5,5 @@ export type Photo = {
   height: number;
   url: string;
   download_url: string;
+  uniqueId: string;
 };
