@@ -6,6 +6,7 @@ function App() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const observerTarget = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(1);
+  const [removingId, setRemovingId] = useState<string | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -44,6 +45,15 @@ function App() {
     fetchPhotos();
   }, [page]);
 
+  const handleRemovePhoto = (uniqueId: string) => {
+    setRemovingId(uniqueId);
+  };
+
+  const handleTransitionEnd = (uniqueId: string) => {
+    setPhotos((prev) => prev.filter((photo) => photo.uniqueId !== uniqueId));
+    setRemovingId(null);
+  };
+
   return (
     <>
       <main>
@@ -51,7 +61,14 @@ function App() {
 
         <div className={styles.galleryGrid}>
           {photos.map((photo) => (
-            <div key={photo.uniqueId}>
+            <div
+              key={photo.uniqueId}
+              onClick={() => handleRemovePhoto(photo.uniqueId)}
+              onTransitionEnd={() => handleTransitionEnd(photo.uniqueId)}
+              className={`${styles.photoCard} ${
+                removingId === photo.uniqueId ? styles.removing : ""
+              }`}
+            >
               <img
                 src={`https://picsum.photos/id/${photo.id}/200/200`}
                 alt={photo.author}
