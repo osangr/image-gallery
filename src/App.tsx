@@ -29,7 +29,10 @@ function App() {
         <div className={styles.galleryGrid}>
           {photos.map((photo) => (
             <div key={photo.id}>
-              <img src={photo.download_url} alt={photo.author} />
+              <img
+                src={`https://picsum.photos/id/${photo.id}/200/200`}
+                alt={photo.author}
+              />
               <p>{photo.author}</p>
             </div>
           ))}
