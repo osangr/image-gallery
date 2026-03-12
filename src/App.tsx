@@ -79,6 +79,14 @@ function App() {
               className={`${styles.photoCard} ${
                 removingId === photo.uniqueId ? styles.removing : ""
               }`}
+              tabIndex={0}
+              role="button"
+              aria-label={`Eliminar foto de ${photo.author}`}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  handleRemovePhoto(photo.uniqueId);
+                }
+              }}
             >
               <img
                 src={`https://picsum.photos/id/${photo.id}/200/200`}
