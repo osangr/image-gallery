@@ -22,10 +22,16 @@ export function ImageCard({
     }
   };
 
+  const handleAnimationEnd = () => {
+    if (isRemoving) {
+      onTransitionEnd(uniqueId);
+    }
+  };
+
   return (
     <article
       onClick={() => onRemove(uniqueId)}
-      onTransitionEnd={() => onTransitionEnd(uniqueId)}
+      onTransitionEnd={handleAnimationEnd}
       className={`${styles.photoCard} ${isRemoving ? styles.removing : ""}`}
       tabIndex={0}
       role="button"
