@@ -1,19 +1,13 @@
 import type { Photo } from "../../types";
 import styles from "./ImageCard.module.scss";
+import { motion } from "framer-motion";
 
 interface ImageCardProps {
   photo: Photo;
   onRemove: (uniqueId: string) => void;
-  onTransitionEnd: (uniqueId: string) => void;
-  isRemoving: boolean;
 }
 
-export function ImageCard({
-  photo,
-  onRemove,
-  onTransitionEnd,
-  isRemoving,
-}: ImageCardProps) {
+export function ImageCard({ photo, onRemove }: ImageCardProps) {
   const { author, uniqueId, id } = photo;
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -22,17 +16,10 @@ export function ImageCard({
     }
   };
 
-  const handleAnimationEnd = () => {
-    if (isRemoving) {
-      onTransitionEnd(uniqueId);
-    }
-  };
-
   return (
-    <article
+    <motion.article
       onClick={() => onRemove(uniqueId)}
-      onTransitionEnd={handleAnimationEnd}
-      className={`${styles.photoCard} ${isRemoving ? styles.removing : ""}`}
+      className={styles.photoCard}
       tabIndex={0}
       role="button"
       aria-label={`Eliminar foto de ${author}`}
@@ -45,6 +32,6 @@ export function ImageCard({
         />
         <figcaption>{author}</figcaption>
       </figure>
-    </article>
+    </motion.article>
   );
 }

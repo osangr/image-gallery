@@ -1,29 +1,10 @@
-$gap: 12px;
-
-.galleryGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: $gap;
-  padding: $gap;
-  list-style: none;
-  margin: 0;
-
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  @media (min-width: 1280px) {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
-.error {
-  color: #e53e3e;
+.title {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 24px 16px;
   text-align: center;
-  padding: 16px;
-  font-size: 0.9rem;
+  color: white;
 }

@@ -6,9 +6,11 @@ export function usePhotos() {
   const [page, setPage] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchPhotos = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(
           `https://picsum.photos/v2/list?page=${page}&limit=100`,
@@ -30,6 +32,8 @@ export function usePhotos() {
         setError(
           "Ha habido un error al cargar las imágenes. Inténtalo de nuevo más tarde.",
         );
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -46,5 +50,5 @@ export function usePhotos() {
     setPhotos((prev) => prev.filter((photo) => photo.uniqueId !== uniqueId));
   };
 
-  return { photos, error, hasMore, loadMore, removePhoto };
+  return { photos, error, hasMore, loadMore, removePhoto, isLoading };
 }
