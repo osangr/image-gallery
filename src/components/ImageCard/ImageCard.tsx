@@ -12,6 +12,7 @@ export function ImageCard({ photo, onRemove }: ImageCardProps) {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
       onRemove(uniqueId);
     }
   };
