@@ -1,13 +1,27 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { usePhotos } from "../../hooks/usePhotos";
 import { ImageCard } from "../ImageCard/ImageCard";
 import styles from "./ImageGallery.module.scss";
+import { AnimatePresence, motion } from "framer-motion";
+
+const containerVariants = {
+  show: {
+    transition: {
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+};
 
 export function ImageGallery() {
   const observerTarget = useRef<HTMLDivElement>(null);
-  const [removingId, setRemovingId] = useState<string | null>(null);
 
-  const { photos, error, hasMore, loadMore, removePhoto } = usePhotos();
+  const { photos, error, hasMore, loadMore, removePhoto, isLoading } =
+    usePhotos();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -27,28 +41,35 @@ export function ImageGallery() {
   }, [loadMore]);
 
   const handleRemovePhoto = (uniqueId: string) => {
-    setRemovingId(uniqueId);
-  };
-
-  const handleTransitionEnd = (uniqueId: string) => {
     removePhoto(uniqueId);
-    setRemovingId(null);
   };
 
   return (
     <>
-      <ul className={styles.galleryGrid}>
-        {photos.map((photo) => (
-          <li key={photo.uniqueId}>
-            <ImageCard
-              photo={photo}
-              onRemove={handleRemovePhoto}
-              onTransitionEnd={handleTransitionEnd}
-              isRemoving={removingId === photo.uniqueId}
-            />
-          </li>
-        ))}
-      </ul>
+      {isLoading && photos.length === 0 ? (
+        <p className={styles.loading}>Cargando...</p>
+      ) : (
+        <motion.ul
+          className={styles.galleryGrid}
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+        >
+          <AnimatePresence>
+            {photos.map((photo) => (
+              <motion.li
+                key={photo.uniqueId}
+                layout
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                variants={itemVariants}
+              >
+                <ImageCard photo={photo} onRemove={handleRemovePhoto} />
+              </motion.li>
+            ))}
+          </AnimatePresence>
+        </motion.ul>
+      )}
       {error && <p className={styles.error}>{error}</p>}
       {!hasMore && <p>No hay más imágenes</p>}
       <div ref={observerTarget} />
