@@ -1,8 +1,12 @@
+$gap: 12px;
+
 .galleryGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  padding: 16px;
+  gap: $gap;
+  padding: $gap;
+  list-style: none;
+  margin: 0;
 
   @media (min-width: 640px) {
     grid-template-columns: repeat(3, 1fr);
@@ -15,32 +19,11 @@
   @media (min-width: 1280px) {
     grid-template-columns: repeat(6, 1fr);
   }
-
-  img {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-    display: block;
-  }
-}
-
-.photoCard {
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-
-  &.removing {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  &:focus {
-    outline: 2px solid #0066cc;
-    outline-offset: 2px;
-  }
 }
 
 .error {
-  color: red;
+  color: #e53e3e;
   text-align: center;
-  margin-top: 20px;
+  padding: 16px;
+  font-size: 0.9rem;
 }

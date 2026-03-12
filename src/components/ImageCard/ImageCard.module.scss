@@ -1,0 +1,56 @@
+.photoCard {
+  cursor: pointer;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+
+  &:hover,
+  &:focus {
+    transform: scale(1.02);
+
+    figcaption {
+      opacity: 1;
+    }
+  }
+
+  &.removing {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  figure {
+    margin: 0;
+    background-color: #0066cc1a;
+  }
+
+  img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+  }
+
+  figcaption {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+}

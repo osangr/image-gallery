@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./App.module.scss";
 import { usePhotos } from "./hooks/usePhotos";
+import { ImageCard } from "./components/ImageCard/ImageCard";
 
 function App() {
   const observerTarget = useRef<HTMLDivElement>(null);
@@ -39,32 +40,18 @@ function App() {
       <main>
         <h1>Image Gallery</h1>
 
-        <div className={styles.galleryGrid}>
+        <ul className={styles.galleryGrid}>
           {photos.map((photo) => (
-            <div
-              key={photo.uniqueId}
-              onClick={() => handleRemovePhoto(photo.uniqueId)}
-              onTransitionEnd={() => handleTransitionEnd(photo.uniqueId)}
-              className={`${styles.photoCard} ${
-                removingId === photo.uniqueId ? styles.removing : ""
-              }`}
-              tabIndex={0}
-              role="button"
-              aria-label={`Eliminar foto de ${photo.author}`}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  handleRemovePhoto(photo.uniqueId);
-                }
-              }}
-            >
-              <img
-                src={`https://picsum.photos/id/${photo.id}/200/200`}
-                alt={photo.author}
+            <li key={photo.uniqueId}>
+              <ImageCard
+                photo={photo}
+                onRemove={handleRemovePhoto}
+                onTransitionEnd={handleTransitionEnd}
+                isRemoving={removingId === photo.uniqueId}
               />
-              <p>{photo.author}</p>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
         {error && <p className={styles.error}>{error}</p>}
         {!hasMore && <p>No hay más imágenes</p>}
         <div ref={observerTarget} />
