@@ -3,6 +3,7 @@ import { usePhotos } from "../../hooks/usePhotos";
 import { ImageCard } from "../ImageCard/ImageCard";
 import styles from "./ImageGallery.module.scss";
 import { AnimatePresence, motion } from "framer-motion";
+import { Skeleton } from "../Skeleton/Skeleton";
 
 const containerVariants = {
   show: {
@@ -13,8 +14,8 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
+  hidden: { opacity: 0 },
+  show: { opacity: 1 },
 };
 
 export function ImageGallery() {
@@ -47,7 +48,7 @@ export function ImageGallery() {
   return (
     <>
       {isLoading && photos.length === 0 ? (
-        <p className={styles.loading}>Cargando...</p>
+        <Skeleton />
       ) : (
         <motion.ul
           className={styles.galleryGrid}
