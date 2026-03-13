@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Photo } from "../types";
 
 export function usePhotos() {
@@ -7,9 +7,12 @@ export function usePhotos() {
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const isLoadingRef = useRef(false);
 
   useEffect(() => {
     const fetchPhotos = async () => {
+      if (isLoadingRef.current) return;
+      isLoadingRef.current = true;
       setIsLoading(true);
       try {
         const response = await fetch(
@@ -35,6 +38,7 @@ export function usePhotos() {
         );
       } finally {
         setIsLoading(false);
+        isLoadingRef.current = false;
       }
     };
 
@@ -42,7 +46,7 @@ export function usePhotos() {
   }, [page]);
 
   const loadMore = useCallback(() => {
-    if (hasMore) {
+    if (hasMore && !isLoadingRef.current) {
       setPage((prev) => prev + 1);
     }
   }, [hasMore]);
