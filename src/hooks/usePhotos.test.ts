@@ -51,13 +51,13 @@ afterEach(() => {
 
 beforeEach(() => {
   vi.spyOn(console, "error").mockImplementation(() => {});
+  vi.mocked(fetch).mockResolvedValue({
+    json: () => Promise.resolve(mockPhotos),
+  } as Response);
 });
 
 describe("usePhotos", () => {
   test("initially loads photos", async () => {
-    vi.mocked(fetch).mockResolvedValue({
-      json: () => Promise.resolve(mockPhotos),
-    } as Response);
     const { result } = renderHook(() => usePhotos());
 
     await waitFor(() => {
@@ -81,9 +81,6 @@ describe("usePhotos", () => {
   });
 
   test("removes photo correctly", async () => {
-    vi.mocked(fetch).mockResolvedValue({
-      json: () => Promise.resolve(mockPhotos),
-    } as Response);
     const { result } = renderHook(() => usePhotos());
 
     await waitFor(() => {
