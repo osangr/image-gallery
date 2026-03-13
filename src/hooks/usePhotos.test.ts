@@ -119,7 +119,7 @@ describe("usePhotos", () => {
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
-        "https://picsum.photos/v2/list?page=2&limit=100",
+        "https://picsum.photos/v2/list?page=2&limit=50",
       );
       expect(result.current.photos).toHaveLength(4);
     });
