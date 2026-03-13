@@ -47,6 +47,7 @@ describe("usePhotos", () => {
       expect(result.current.error).toBe(
         "Ha habido un error al cargar las imágenes. Inténtalo de nuevo más tarde.",
       );
+      expect(result.current.hasMore).toBe(false);
     });
   });
 });
