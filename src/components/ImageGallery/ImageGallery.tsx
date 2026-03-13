@@ -6,6 +6,7 @@ import { Skeleton } from "../Skeleton/Skeleton";
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
 import { EmptyState } from "../EmptyState/EmptyState";
 import styles from "./ImageGallery.module.scss";
+import { Spinner } from "../Spinner/Spinner";
 
 const containerVariants = {
   show: {
@@ -33,7 +34,7 @@ export function ImageGallery() {
           loadMore();
         }
       },
-      { threshold: 0.1 },
+      { threshold: 0, rootMargin: "200px" },
     );
 
     if (observerTarget.current) {
@@ -73,6 +74,7 @@ export function ImageGallery() {
           </AnimatePresence>
         </motion.ul>
       )}
+      {isLoading && photos.length > 0 && <Spinner />}
       {error && <ErrorMessage message={error} />}
       {!hasMore && <EmptyState message="No hay más fotos para cargar." />}
       <div ref={observerTarget} />
