@@ -1,9 +1,11 @@
 import { useEffect, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { usePhotos } from "../../hooks/usePhotos";
 import { ImageCard } from "../ImageCard/ImageCard";
-import styles from "./ImageGallery.module.scss";
-import { AnimatePresence, motion } from "framer-motion";
 import { Skeleton } from "../Skeleton/Skeleton";
+import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
+import { EmptyState } from "../EmptyState/EmptyState";
+import styles from "./ImageGallery.module.scss";
 
 const containerVariants = {
   show: {
@@ -71,8 +73,8 @@ export function ImageGallery() {
           </AnimatePresence>
         </motion.ul>
       )}
-      {error && <p className={styles.error}>{error}</p>}
-      {!hasMore && <p>No hay más imágenes</p>}
+      {error && <ErrorMessage message={error} />}
+      {!hasMore && <EmptyState message="No hay más fotos para cargar." />}
       <div ref={observerTarget} />
     </>
   );

@@ -30,6 +30,7 @@ export function ImageCard({ photo, onRemove }: ImageCardProps) {
         <img
           src={`https://picsum.photos/id/${id}/200/200`}
           alt={`Imagen de ${author}`}
+          loading="lazy"
         />
         <figcaption>{author}</figcaption>
       </figure>

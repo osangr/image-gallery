@@ -13,7 +13,7 @@ export function usePhotos() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `https://picsum.photos/v2/list?page=${page}&limit=100`,
+          `https://picsum.photos/v2/list?page=${page}&limit=50`,
         );
         const data: Photo[] = await response.json();
 
