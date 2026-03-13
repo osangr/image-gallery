@@ -28,6 +28,7 @@ export function usePhotos() {
         }));
         setPhotos((prev) => [...prev, ...photosWithUniqueId]);
       } catch (error) {
+        setHasMore(false);
         console.error("Error fetching photos:", error);
         setError(
           "Ha habido un error al cargar las imágenes. Inténtalo de nuevo más tarde.",
