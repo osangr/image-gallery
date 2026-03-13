@@ -4,6 +4,7 @@ import { usePhotos } from "../../hooks/usePhotos";
 import { ImageCard } from "../ImageCard/ImageCard";
 import { Skeleton } from "../Skeleton/Skeleton";
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
+import { EmptyState } from "../EmptyState/EmptyState";
 import styles from "./ImageGallery.module.scss";
 
 const containerVariants = {
@@ -73,7 +74,7 @@ export function ImageGallery() {
         </motion.ul>
       )}
       {error && <ErrorMessage message={error} />}
-      {!hasMore && <p>No hay más imágenes</p>}
+      {!hasMore && <EmptyState message="No hay más fotos para cargar." />}
       <div ref={observerTarget} />
     </>
   );
