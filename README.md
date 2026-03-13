@@ -2,6 +2,10 @@
 
 Galería de imágenes con scroll infinito, animaciones suaves y eliminación de fotos por clic o teclado.
 
+## Demo
+
+https://image-gallery-six-blue.vercel.app/
+
 ---
 
 ## Instalación y arranque
@@ -44,9 +48,13 @@ Para un proyecto de este tamaño, opté por una estructura sencilla agrupando po
 ```
 src/
   components/
-    ImageGallery/
+    EmptyState/
+    ErrorMessage/
     ImageCard/
+    ImageGallery/
     Skeleton/
+    ScrollToTop/
+    Spinner/
   hooks/
     usePhotos.ts
   styles/
