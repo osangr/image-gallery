@@ -44,10 +44,6 @@ export function ImageGallery() {
     return () => observer.disconnect();
   }, [loadMore]);
 
-  const handleRemovePhoto = (uniqueId: string) => {
-    removePhoto(uniqueId);
-  };
-
   return (
     <>
       {isLoading && photos.length === 0 ? (
@@ -68,7 +64,7 @@ export function ImageGallery() {
                 transition={{ duration: 0.3 }}
                 variants={itemVariants}
               >
-                <ImageCard photo={photo} onRemove={handleRemovePhoto} />
+                <ImageCard photo={photo} onRemove={removePhoto} />
               </motion.li>
             ))}
           </AnimatePresence>
