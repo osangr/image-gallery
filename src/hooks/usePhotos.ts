@@ -18,6 +18,9 @@ export function usePhotos() {
         const response = await fetch(
           `https://picsum.photos/v2/list?page=${page}&limit=50`,
         );
+
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
         const data: Photo[] = await response.json();
 
         if (data.length === 0) {
