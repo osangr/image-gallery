@@ -52,6 +52,7 @@ afterEach(() => {
 beforeEach(() => {
   vi.spyOn(console, "error").mockImplementation(() => {});
   vi.mocked(fetch).mockResolvedValue({
+    ok: true,
     json: () => Promise.resolve(mockPhotos),
   } as Response);
 });
@@ -101,9 +102,11 @@ describe("usePhotos", () => {
   test("loadMore increments page and fetches more photos", async () => {
     vi.mocked(fetch)
       .mockResolvedValueOnce({
+        ok: true,
         json: () => Promise.resolve(mockPhotos),
       } as Response)
       .mockResolvedValueOnce({
+        ok: true,
         json: () => Promise.resolve(mockPhotosPage2),
       } as Response);
 
@@ -122,6 +125,24 @@ describe("usePhotos", () => {
         "https://picsum.photos/v2/list?page=2&limit=50",
       );
       expect(result.current.photos).toHaveLength(4);
+    });
+  });
+
+  test("handles HTTP error response", async () => {
+    vi.mocked(fetch).mockResolvedValue({
+      ok: false,
+      status: 500,
+      json: () => Promise.resolve({}),
+    } as Response);
+
+    const { result } = renderHook(() => usePhotos());
+
+    await waitFor(() => {
+      expect(result.current.photos).toHaveLength(0);
+      expect(result.current.error).toBe(
+        "Ha habido un error al cargar las imágenes. Inténtalo de nuevo más tarde.",
+      );
+      expect(result.current.hasMore).toBe(false);
     });
   });
 });
