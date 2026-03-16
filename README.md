@@ -1,6 +1,6 @@
 # Image Gallery
 
-Galería de imágenes con scroll infinito, animaciones suaves y eliminación de fotos por clic o teclado.
+Galería de imágenes con scroll infinito, animaciones suaves y eliminación de fotos por click o teclado.
 
 ## Demo
 
