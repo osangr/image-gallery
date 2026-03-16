@@ -83,14 +83,18 @@ Usé `crypto.randomUUID()` para generar IDs únicos por elemento. La API de Pics
 
 ### Rendimiento del DOM
 
-Soy consciente del problema de rendimiento que puede suponer un DOM con muchos elementos. Tras investigar, concluí que la virtualización es compleja de implementar correctamente en un grid con animaciones de Framer Motion. Además, la API sirve un máximo de 5000 fotos, lo que en la práctica no supone un problema real de rendimiento. Si se diera el caso, implementaría `react-window` o `TanStack Virtual` para mantener el número de nodos del DOM bajo control.
+Soy consciente del problema de rendimiento que puede suponer un DOM con muchos elementos. Tras investigar, concluí que la virtualización es compleja de implementar correctamente en un grid con animaciones de Framer Motion, y que el volumen de datos de esta API no supone un problema real de rendimiento en la práctica. En un proyecto con mayor volumen de datos, implementaría `react-window` o `TanStack Virtual` para virtualizar el grid y mantener en el DOM únicamente los elementos visibles en cada momento, descartando los que están fuera de pantalla.
 
 ### Tests
 
-Tests unitarios para las dos piezas principales de la app. Para el componente `ImageCard` se testea el renderizado, la eliminación al hacer clic y por teclado con Enter y Space, y el `aria-label` correcto. Para el hook `usePhotos` se testea la carga inicial de fotos, el manejo de errores de la API, la eliminación correcta de una foto y la carga de más imágenes al paginar.
+Tests unitarios para las dos piezas principales de la app. Para el componente `ImageCard` se testea el renderizado, la eliminación al hacer clic y por teclado con Enter y Space, y el `aria-label` correcto. Para el hook `usePhotos` se testea la carga inicial de fotos, el manejo de errores de la API, la eliminación correcta de una foto y la carga de más imágenes al paginar. También se testea el componente `ScrollToTop`: que el botón no se muestra al inicio, que aparece al hacer scroll y que al hacer clic llama a `window.scrollTo` con los parámetros correctos.
+
+### Accesibilidad
+
+Las imágenes son navegables y eliminables únicamente con teclado mediante Tab para moverse entre ellas y Enter o Space para eliminarlas. Cada imagen tiene un `aria-label` descriptivo con el nombre del autor. Los estados de carga y error usan `role="status"` y `role="alert"` respectivamente para comunicar cambios a lectores de pantalla.
 
 ---
 
 ## Uso de IA
 
-Para este proyecto usé GitHub Copilot para autocompletado — especialmente útil para generar mocks en los tests, código repetitivo y el Skeleton antes de cargar las imágenes. También usé Claude para investigar y resolver problemas con animaciones CSS en el grid y para ayudarme a estructurar y documentar este README. 
+Para este proyecto usé GitHub Copilot para autocompletado — especialmente útil para generar mocks en los tests, código repetitivo y el Skeleton antes de cargar las imágenes. También usé Claude para investigar y resolver problemas con animaciones CSS en el grid y para ayudarme a estructurar y documentar este README.
