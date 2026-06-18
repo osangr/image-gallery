@@ -1,51 +1,33 @@
 # Image Gallery
 
-Galería de imágenes con scroll infinito, animaciones suaves y eliminación de fotos por click o teclado.
+An image gallery with infinite scroll, smooth animations and photo deletion by click or keyboard.
 
 ## Demo
-
 https://image-gallery-six-blue.vercel.app/
 
----
-
-## Instalación y arranque
-
-```bash
+## Installation
 npm install
 npm run dev
-```
 
-La aplicación estará disponible en `http://localhost:5173`.
+The app will be available at http://localhost:5173.
 
-## Ejecutar los tests
-
-```bash
+## Running tests
 npm test
-```
 
-Para ejecutar los tests una sola vez sin modo watch:
-
-```bash
+To run tests once without watch mode:
 npm test -- --run
-```
 
----
+## Technical decisions
 
-## Decisiones técnicas
+### React + Vite instead of Next.js
+This project doesn't require routing, SSR or any of Next.js strengths, so React + Vite was the right tool for the job.
 
-### React + Vite en lugar de Next.js
+### Picsum API instead of jsonplaceholder
+The jsonplaceholder API wasn't available during development, so I replaced it with Picsum Photos, which offers a similar interface with real images. The goal is to demonstrate the gallery functionality regardless of the data source.
 
-Aunque la posición es para Next.js, decidí usar React con Vite porque esta prueba no requiere navegación entre páginas, SSR ni ninguna de las funcionalidades que hacen fuerte a Next.js. Añadir todo el boilerplate de Next.js para no aprovechar ninguna de sus ventajas no tenía sentido.
+### Architecture
+For a project of this size, I went with a simple structure grouped by functionality — no unnecessary layers. In a larger project I'd consider splitting by features or following a different architecture.
 
-### API de Picsum en lugar de jsonplaceholder
-
-Como la API de jsonplaceholder no estaba disponible durante el desarrollo la sustituí por Picsum Photos, que ofrece una interfaz similar con imágenes reales, ya que el objetivo de la prueba es demostrar el funcionamiento de la galería independientemente de la fuente de datos.
-
-### Arquitectura y organización de carpetas
-
-Para un proyecto de este tamaño, opté por una estructura sencilla agrupando por funcionalidad (componentes, hooks y tipos) sin añadir capas innecesarias. En un proyecto más grande consideraría separar por features o seguir otro tipo de arquitectura
-
-```
 src/
   components/
     EmptyState/
@@ -61,40 +43,29 @@ src/
     variables.scss
   types/
     index.ts
-```
 
-La lógica de datos está completamente separada de la UI. `usePhotos` gestiona el fetch, la paginación, el estado de carga y la eliminación. Los componentes solo se ocupan de renderizar.
+Data logic is completely separated from the UI. `usePhotos` handles fetching, pagination, loading state and deletion. Components only deal with rendering.
 
 ### SCSS Modules
+I used SCSS Modules to avoid style collisions, with shared variables in `variables.scss` to keep consistency between the gallery grid and the skeleton loader — both use the exact same columns and gap.
 
-Usé SCSS porque era un requisito deseable de la oferta. Concretamente usé CSS Modules para evitar colisiones de estilos y variables compartidas en un archivo `variables.scss` para mantener consistencia entre el grid de la galería y el skeleton loader — ambos usan exactamente las mismas columnas y gap.
-
-### IntersectionObserver nativo
-
-Para el scroll infinito usé la API nativa `IntersectionObserver` en lugar de una librería externa. Es suficientemente potente para este caso de uso y evita añadir dependencias innecesarias al proyecto.
+### Native IntersectionObserver
+For infinite scroll I used the native IntersectionObserver API instead of an external library. It's powerful enough for this use case and avoids adding unnecessary dependencies.
 
 ### Framer Motion
-
-Las animaciones CSS puras daban saltos visibles en el grid al eliminar elementos. Tras investigar, usé Framer Motion para resolverlo. `AnimatePresence` mantiene el elemento en el DOM hasta que la animación de salida finaliza, lo que elimina los saltos.
+Pure CSS animations caused visible jumps in the grid when removing elements. I used Framer Motion to solve this — `AnimatePresence` keeps the element in the DOM until the exit animation completes, eliminating the jumps.
 
 ### crypto.randomUUID()
+Used to generate unique IDs per element. The Picsum API repeats IDs across pages, which caused issues with React keys when deleting elements.
 
-Usé `crypto.randomUUID()` para generar IDs únicos por elemento. La API de Picsum repite IDs entre páginas, lo que causaba problemas con las keys de React al eliminar elementos.
+### DOM performance
+I'm aware of the performance issue that a large DOM can cause. After researching, I concluded that virtualisation is complex to implement correctly in a grid with Framer Motion animations, and that the data volume of this API doesn't cause real performance issues in practice. In a project with larger data volumes, I'd implement `react-window` or TanStack Virtual to virtualise the grid.
 
-### Rendimiento del DOM
+## Tests
+Unit tests for the two main pieces of the app:
+- **ImageCard:** rendering, deletion on click and keyboard (Enter and Space), correct aria-label.
+- **usePhotos:** initial photo load, API error handling, correct photo deletion and pagination.
+- **ScrollToTop:** button not shown on load, appears on scroll, calls `window.scrollTo` with correct params on click.
 
-Soy consciente del problema de rendimiento que puede suponer un DOM con muchos elementos. Tras investigar, concluí que la virtualización es compleja de implementar correctamente en un grid con animaciones de Framer Motion, y que el volumen de datos de esta API no supone un problema real de rendimiento en la práctica. En un proyecto con mayor volumen de datos, implementaría `react-window` o `TanStack Virtual` para virtualizar el grid y mantener en el DOM únicamente los elementos visibles en cada momento, descartando los que están fuera de pantalla.
-
-### Tests
-
-Tests unitarios para las dos piezas principales de la app. Para el componente `ImageCard` se testea el renderizado, la eliminación al hacer clic y por teclado con Enter y Space, y el `aria-label` correcto. Para el hook `usePhotos` se testea la carga inicial de fotos, el manejo de errores de la API, la eliminación correcta de una foto y la carga de más imágenes al paginar. También se testea el componente `ScrollToTop`: que el botón no se muestra al inicio, que aparece al hacer scroll y que al hacer clic llama a `window.scrollTo` con los parámetros correctos.
-
-### Accesibilidad
-
-Las imágenes son navegables y eliminables únicamente con teclado mediante Tab para moverse entre ellas y Enter o Space para eliminarlas. Cada imagen tiene un `aria-label` descriptivo con el nombre del autor. Los estados de carga y error usan `role="status"` y `role="alert"` respectivamente para comunicar cambios a lectores de pantalla.
-
----
-
-## Uso de IA
-
-Para este proyecto usé GitHub Copilot para autocompletado — especialmente útil para generar mocks en los tests, código repetitivo y el Skeleton antes de cargar las imágenes. También usé Claude para investigar y resolver problemas con animaciones CSS en el grid y para ayudarme a estructurar y documentar este README.
+## Accessibility
+Images are fully keyboard navigable — Tab to move between them, Enter or Space to delete. Each image has a descriptive aria-label with the author's name. Loading and error states use `role="status"` and `role="alert"` to communicate changes to screen readers.
